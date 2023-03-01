@@ -13,7 +13,7 @@ module GoogleAuthenticatorRails
 
     module ClassMethods
       def find
-        cookie = cookies[cookie_key]
+        cookie = cookies[:cookie_key]
         if cookie
           token, user_id = parse_cookie(cookie).values_at(:token, :user_id)
           conditions = { klass.google_lookup_token => token, :id => user_id }
@@ -27,7 +27,7 @@ module GoogleAuthenticatorRails
 
       def create(user)
         raise GoogleAuthenticatorRails::Session::Persistence::TokenNotFound if user.nil? || !user.respond_to?(user.class.google_lookup_token) || user.google_token_value.blank?
-        cookies[cookie_key] = create_cookie(user.google_token_value, user.id)
+        cookies[:cookie_key] = create_cookie(user.google_token_value, user.id)
         new(user)
       end
 
